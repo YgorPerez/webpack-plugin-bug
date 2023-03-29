@@ -1,12 +1,25 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-var-requires */
+// @ts-nocheck
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
  * This is especially useful for Docker builds.
  */
-!process.env.SKIP_ENV_VALIDATION && (await import("./src/env.mjs"));
+const { TailwindCSSWebpackPlugin } = require("tailwindcss-webpack-plugin");
 
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
+
+  webpack: (config) => {
+    config.plugins.push(
+      new TailwindCSSWebpackPlugin({
+        entry: "./src/styles/globals.css",
+        config: "./tailwind-config.cjs",
+      })
+    );
+    return config;
+  },
 
   /**
    * If you have the "experimental: { appDir: true }" setting enabled, then you
@@ -19,4 +32,4 @@ const config = {
     defaultLocale: "en",
   },
 };
-export default config;
+module.exports = config;
